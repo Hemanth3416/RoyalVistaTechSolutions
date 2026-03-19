@@ -436,12 +436,15 @@ document.addEventListener('DOMContentLoaded', () => {
             platform: platform
         });
 
-        const shareText = `Check out this job opportunity: ${job.Title}\n${job.Link || window.location.href}`;
+        // Use current website URL rather than external job application link
+        const shareUrl = window.location.origin + window.location.pathname + '?job=' + encodedTitle;
+        const shareText = `Check out this job opportunity: ${job.Title}\n${shareUrl}`;
+        
         if (platform === 'Network' && navigator.share) {
             navigator.share({
                 title: job.Title,
                 text: shareText,
-                url: job.Link || window.location.href
+                url: shareUrl
             }).catch(err => console.log('Error sharing', err));
         } else {
             // Fallback
@@ -477,9 +480,11 @@ document.addEventListener('DOMContentLoaded', () => {
             `<div style="margin-top:2rem; margin-bottom:1.5rem;"><a href="${job.Link}" target="_blank" onclick="window.trackEvent('job_apply_click', { job_title: decodeURIComponent('${encodedApplyTitle}'), apply_link: decodeURIComponent('${encodedLink}') })" class="btn btn-primary" style="display:inline-flex; align-items:center; padding:12px 28px; font-weight:bold; border-radius:50px; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 15px rgba(3, 218, 198, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"><i class="fas fa-paper-plane" style="margin-right:8px;"></i> Apply Now</a></div>`
             : '<div style="margin-top:2rem;"></div>';
 
-        const shareMsgText = `Check out this job opportunity: ${job.Title}\n${job.Link || window.location.href}`;
+        // Build internal site URL for dynamic sharing
+        const internalShareUrl = window.location.origin + window.location.pathname + '?job=' + encodedTitle;
+        const shareMsgText = `Check out this job opportunity: ${job.Title}\n${internalShareUrl}`;
         const waLink = `https://wa.me/?text=${encodeURIComponent(shareMsgText)}`;
-        const tgLink = `https://t.me/share/url?url=${encodeURIComponent(job.Link || window.location.href)}&text=${encodeURIComponent(job.Title)}`;
+        const tgLink = `https://t.me/share/url?url=${encodeURIComponent(internalShareUrl)}&text=${encodeURIComponent(job.Title)}`;
 
         document.getElementById('jobModalDescArea').innerHTML = `
             <div style="color:var(--text-muted); line-height:1.8; white-space:pre-wrap; font-size:1.05rem;">${job.Description || 'No description provided.'}</div>

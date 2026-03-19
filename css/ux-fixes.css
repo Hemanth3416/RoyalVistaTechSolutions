@@ -47,6 +47,20 @@
     }
 }
 
+/* Special Overrides for Mobile Image Fitting and Single-Row Job Posts */
+@media (max-width: 768px) {
+    /* Force Portfolio Card Images to contain properly without cropping out logos */
+    .portfolio-img img {
+        object-fit: contain !important;
+        background-color: var(--bg-darker); /* Provide clean background for contained images */
+    }
+
+    /* Force Job Grid into Single Column Rectangle Shape on Mobile */
+    #jobsGrid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 /* Dashboard Portfolio & Job Responsive Fixes */
 
 /* Modal Responsiveness */
