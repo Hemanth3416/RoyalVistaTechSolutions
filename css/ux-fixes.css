@@ -70,8 +70,18 @@
         width: 100% !important;
         height: auto !important;
         min-height: calc(100vw * 9/16) !important;
-        display: block !important;
+        display: block;
         margin-bottom: 0.5rem;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        z-index: 1;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    
+    .job-card:hover, .portfolio-item:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4) !important;
+        z-index: 2;
     }
     /* Custom scrollbar to match premium look */
     .portfolio-grid, #jobsGrid {

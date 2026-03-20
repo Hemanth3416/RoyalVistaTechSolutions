@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    /* --- Utility: Helpers --- */
+    function encodeTitle(text) {
+        if (!text) return "";
+        return encodeURIComponent(text);
+    }
+
     /* --- Navigation --- */
     const mobileMenu = document.getElementById('mobile-menu');
     const navMenu = document.querySelector('.nav-menu');
@@ -228,6 +234,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const jobSearchInput = document.getElementById('jobSearchInput');
     let allJobsData = [];
 
+    // Task 1: Single, Stable Root Event Listener for Job Card Clicks (SPA-style Navigation)
+    if (jobsGrid) {
+        jobsGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.job-card');
+            const shareBtn = e.target.closest('button');
+
+            // If we clicked the card but NOT the share button...
+            if (card && !shareBtn) {
+                // If on same page, use modal instead of reload
+                if (card.href && card.href.includes(window.location.pathname)) {
+                    e.preventDefault(); 
+                    const index = card.getAttribute('data-index');
+                    if (index !== null) {
+                        openJobModal(parseInt(index));
+                    }
+                }
+            }
+        });
+    }
+
     // Smart fallback parsing for Google Sheets column names
     function getJobVal(job, possibleKeys) {
         if (!job) return null;
@@ -280,8 +306,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 renderJobs(allJobsData);
                 setupJobFilters(allJobsData);
+                checkUrlForJob(); // Task 2C: Auto-open modal if URL specifies a job
             })
             .catch(err => console.error("Error loading jobs:", err));
+    }
+
+    // Task 2C: Handle Job Title from URL
+    function checkUrlForJob() {
+        const params = new URLSearchParams(window.location.search);
+        let jobParam = params.get("job") || params.get("slug");
+
+        if (jobParam && allJobsData.length > 0) {
+            // Find job by Title
+            const foundIndex = allJobsData.findIndex(j =>
+                encodeURIComponent(j.Title) === jobParam ||
+                j.Title === jobParam
+            );
+            if (foundIndex !== -1) {
+                setTimeout(() => openJobModal(foundIndex, false), 300); 
+            }
+        }
+    }
+
+    // Task 3: Social Share Preview (OG Tags)
+    function updateDynamicMeta(job) {
+        if (!job) return;
+        const encodedTitle = encodeURIComponent(job.Title);
+        const legacyUrl = window.location.origin + '/jobs.html?job=' + encodedTitle;
+
+        // Update Title & OG tags for platforms that support script-based updates
+        document.title = `${job.Title} | Job Updates | RoyalVista`;
+
+        const metaTags = {
+            'og:title': job.Title,
+            'og:description': job.Description ? job.Description.substring(0, 160) : 'New job opportunity via RoyalVista Tech Solutions.',
+            'og:image': job.Image || 'https://royalvistatechsolutions.vercel.app/assets/images/og-default.jpg',
+            'og:url': legacyUrl
+        };
+
+        for (const [property, content] of Object.entries(metaTags)) {
+            let tag = document.querySelector(`meta[property="${property}"]`);
+            if (tag) {
+                tag.content = content;
+            } else {
+                tag = document.createElement('meta');
+                tag.setAttribute('property', property);
+                tag.content = content;
+                document.head.appendChild(tag);
+            }
+        }
     }
 
     function renderJobs(jobsToRender) {
@@ -323,8 +396,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const encodedTitleForSharing = encodeURIComponent(job.Title || '');
+            
             const html = `
-                <div class="job-card" onclick="openJobModal(${originalIndex})" style="position:relative; display:flex; flex-direction:column; background:var(--card-bg); border-radius:12px; border:1px solid var(--border-color); overflow:hidden; transition: transform 0.3s ease, box-shadow 0.3s; cursor:pointer;">
+                <a href="jobs.html?job=${encodedTitleForSharing}" class="job-card" data-index="${originalIndex}" style="text-decoration:none; color:inherit; position:relative; display:flex; flex-direction:column; background:var(--card-bg); border-radius:12px; border:1px solid var(--border-color); overflow:hidden; transition: transform 0.3s ease, box-shadow 0.3s; cursor:pointer;">
                     ${newBadgeHtml}
                     ${imgHtml}
                     <div style="padding: 1.5rem; flex:1; display:flex; flex-direction:column;">
@@ -332,34 +406,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="margin-bottom:0.5rem; font-size:1.25rem;">${job.Title}</h3>
                         
                         <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:auto; border-top:1px solid #333; padding-top:1rem;">
-                            <button onclick="event.stopPropagation(); shareJob('${encodedTitleForSharing}')" aria-label="Share Job" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem; transition:0.2s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-share-alt"></i></button>
+                            <button onclick="event.preventDefault(); event.stopPropagation(); shareJob('${encodedTitleForSharing}')" aria-label="Share Job" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem; transition:0.2s; position:relative; z-index:15;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-share-alt"></i></button>
                         </div>
                     </div>
-                </div>
+                </a>
             `;
             jobsGrid.insertAdjacentHTML('beforeend', html);
-        });
-
-        // Add subtle hover effects to new cards
-        document.querySelectorAll('.job-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-5px)';
-                card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.3)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-                card.style.boxShadow = 'none';
-            });
-            const waIcon = card.querySelector('.fa-whatsapp');
-            if (waIcon) {
-                waIcon.parentElement.addEventListener('mouseenter', () => waIcon.style.transform = 'scale(1.2)');
-                waIcon.parentElement.addEventListener('mouseleave', () => waIcon.style.transform = 'scale(1)');
-            }
-            const copyIcon = card.querySelector('.fa-copy');
-            if (copyIcon) {
-                copyIcon.parentElement.addEventListener('mouseenter', () => { copyIcon.style.color = 'var(--primary-color)'; copyIcon.style.transform = 'scale(1.2)' });
-                copyIcon.parentElement.addEventListener('mouseleave', () => { copyIcon.style.color = 'var(--text-muted)'; copyIcon.style.transform = 'scale(1)' });
-            }
         });
     }
 
@@ -425,10 +477,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (jobDetailModal) {
             jobDetailModal.classList.remove('active');
             document.body.style.overflow = 'auto';
+
+            // Reset URL when closing modal (don't break landing page)
+            if (window.location.pathname.includes('/jobs/')) {
+                window.history.pushState({}, '', '/jobs.html');
+            }
         }
     }
 
-    // Modern Native Share API support
+    // Task 2, 4, 5: Clean & Professional Sharing Links
     window.shareJob = function (encodedTitle, platform = 'Network') {
         if (!allJobsData) return;
         const job = allJobsData.find(j => encodeURIComponent(j.Title || '') === encodedTitle);
@@ -439,27 +496,50 @@ document.addEventListener('DOMContentLoaded', () => {
             platform: platform
         });
 
-        // Use current website URL rather than external job application link
-        const shareUrl = window.location.origin + window.location.pathname + '?job=' + encodedTitle;
-        const shareText = `Check out this job opportunity: ${job.Title}\n${shareUrl}`;
+        const slug = toSlug(job.Title);
+        // Task 4: Use short, clean path instead of query strings
+        const shareUrl = window.location.origin + '/jobs/' + slug;
         
+        // WhatsApp / Telegram optimized messages
+        const platformMsgs = {
+            'WhatsApp': `🔥 *Job Opening Alert* 🔥\n\n*${job.Title}*\n\nRead more & Apply here:\n${shareUrl}`,
+            'Telegram': `🚀 *New Career Opportunity*\n\n*${job.Title}*\n\nView details:\n${shareUrl}`,
+            'Network': `Check out this job opportunity: ${job.Title}\n${shareUrl}`
+        };
+
+        const shareText = platformMsgs[platform] || platformMsgs['Network'];
+
         if (platform === 'Network' && navigator.share) {
             navigator.share({
                 title: job.Title,
-                text: shareText,
+                text: `Check out this job opportunity: ${job.Title}`,
                 url: shareUrl
             }).catch(err => console.log('Error sharing', err));
+        } else if (platform === 'WhatsApp' || platform === 'Telegram') {
+             // Let the native href handle it if platforms were passed via a element, 
+             // but here we are in a function, so we might need to trigger window.open
+             // However, the links are already generated in modal. We just update clipboard as fallback here.
+             navigator.clipboard.writeText(shareText);
         } else {
-            // Fallback
+            // Fallback: Copy to clipboard
             navigator.clipboard.writeText(shareText);
-            alert('Job text and link copied to your clipboard!');
+            alert('Job link copied to your clipboard!');
         }
     }
 
-    window.openJobModal = function (jobIndex) {
+    window.openJobModal = function (jobIndex, shouldPushState = true) {
         if (!allJobsData || allJobsData.length === 0) return;
         const job = allJobsData[jobIndex];
         if (!job) return;
+
+        // Task 3: Update OG Meta dynamically
+        updateDynamicMeta(job);
+
+        // Restore URL behavior (Legacy ?job= style)
+        if (shouldPushState) {
+            const encodedTitle = encodeURIComponent(job.Title);
+            window.history.replaceState({ jobIndex }, job.Title, `?job=${encodedTitle}`);
+        }
 
         const cats = job.Categories ? String(job.Categories).split(',').map(c => c.trim()) : [];
         const encodedTitle = encodeURIComponent(job.Title || '');
@@ -474,8 +554,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const imageUrl = job.Image || null;
         const imgContainer = document.getElementById('jobModalImageContainer');
-        imgContainer.innerHTML = imageUrl ? `<img src="${imageUrl}" style="width:100%; max-height:400px; object-fit:contain; background:#000;">` : '';
-        imgContainer.style.display = imageUrl ? 'block' : 'none';
+        const imgHtml = imageUrl ?
+            `<img src="${imageUrl}" style="width:100%; max-height:400px; object-fit:contain; background:#000;">` :
+            `<div style="height:250px; background:var(--accent-gradient); display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; border-radius:12px; font-weight:bold;">
+                <i class="fas fa-briefcase" style="font-size:3rem; margin-bottom:1rem; opacity:0.8;"></i>
+                <p style="color:#fff; margin:0; font-size:1.2rem;">${cats[0] || 'Job Opportunity'}</p>
+             </div>`;
+        imgContainer.innerHTML = imgHtml;
+        imgContainer.style.display = 'block';
 
         // Custom Layout for Desc -> Apply -> Share
         const encodedLink = encodeURIComponent(job.Link || '#');
@@ -484,21 +570,24 @@ document.addEventListener('DOMContentLoaded', () => {
             `<div style="margin-top:2rem; margin-bottom:1.5rem;"><a href="${job.Link}" target="_blank" onclick="window.trackEvent('job_apply_click', { job_title: decodeURIComponent('${encodedApplyTitle}'), apply_link: decodeURIComponent('${encodedLink}') })" class="btn btn-primary" style="display:inline-flex; align-items:center; padding:12px 28px; font-weight:bold; border-radius:50px; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 15px rgba(3, 218, 198, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"><i class="fas fa-paper-plane" style="margin-right:8px;"></i> Apply Now</a></div>`
             : '<div style="margin-top:2rem;"></div>';
 
-        // Build internal site URL for dynamic sharing
-        const internalShareUrl = window.location.origin + window.location.pathname + '?job=' + encodedTitle;
-        const shareMsgText = `Check out this job opportunity: ${job.Title}\n${internalShareUrl}`;
-        const waLink = `https://wa.me/?text=${encodeURIComponent(shareMsgText)}`;
-        const tgLink = `https://t.me/share/url?url=${encodeURIComponent(internalShareUrl)}&text=${encodeURIComponent(job.Title)}`;
+        // Build internal site URL for dynamic sharing (Legacy format)
+        const encodedTitleParam = encodeURIComponent(job.Title || '');
+        const internalShareUrl = window.location.origin + '/jobs.html?job=' + encodedTitleParam;
+        const waMsg = encodeURIComponent(`🔥 *Job Opening Alert* 🔥\n\n*${job.Title}*\n\nApply here:\n${internalShareUrl}`);
+        const tgMsg = encodeURIComponent(`🚀 *New Opportunity:* ${job.Title}\n${internalShareUrl}`);
+        
+        const waLink = `https://wa.me/?text=${waMsg}`;
+        const tgLink = `https://t.me/share/url?url=${encodeURIComponent(internalShareUrl)}&text=${encodeURIComponent('🚀 New Job Opportunity: ' + job.Title)}`;
 
         document.getElementById('jobModalDescArea').innerHTML = `
             <div style="color:var(--text-muted); line-height:1.8; white-space:pre-wrap; font-size:1.05rem;">${job.Description || 'No description provided.'}</div>
             ${applyBtnHtml}
             <div style="display:flex; gap:12px; align-items:center; padding-top:1.5rem; border-top:1px solid var(--border-color);">
                 <span style="color:var(--text-muted); font-size:0.95rem; margin-right:5px; font-weight:600;">Share this job:</span>
-                <a href="${waLink}" target="_blank" onclick="window.shareJob('${encodedTitle}', 'WhatsApp')" title="Share on WhatsApp" style="background:#25D366; color:#fff; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:50%; text-decoration:none; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fab fa-whatsapp" style="font-size:1.3rem;"></i></a>
-                <a href="${tgLink}" target="_blank" onclick="window.shareJob('${encodedTitle}', 'Telegram')" title="Share on Telegram" style="background:#0088cc; color:#fff; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:50%; text-decoration:none; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fab fa-telegram-plane" style="font-size:1.3rem;"></i></a>
+                <a href="${waLink}" target="_blank" onclick="window.trackEvent('job_share', {job_title: decodeURIComponent('${encodedTitle}'), platform: 'WhatsApp'})" title="Share on WhatsApp" style="background:#25D366; color:#fff; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:50%; text-decoration:none; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fab fa-whatsapp" style="font-size:1.3rem;"></i></a>
+                <a href="${tgLink}" target="_blank" onclick="window.trackEvent('job_share', {job_title: decodeURIComponent('${encodedTitle}'), platform: 'Telegram'})" title="Share on Telegram" style="background:#0088cc; color:#fff; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:50%; text-decoration:none; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fab fa-telegram-plane" style="font-size:1.3rem;"></i></a>
                 <button onclick="window.shareJob('${encodedTitle}')" title="More Options" style="background:#555; color:#fff; width:45px; height:45px; border:none; border-radius:50%; cursor:pointer; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fas fa-share-alt" style="font-size:1.2rem;"></i></button>
-                <button onclick="navigator.clipboard.writeText('${shareMsgText.replace(/\n/g, ' ')}'); window.shareJob('${encodedTitle}', 'Clipboard'); this.innerHTML='<i class=\\\'fas fa-check\\\'></i>'; setTimeout(() => this.innerHTML='<i class=\\\'fas fa-link\\\'></i>', 2000);" title="Copy Link" style="background:#333; color:#fff; width:45px; height:45px; border:none; border-radius:50%; cursor:pointer; transition:0.2s; margin-left:auto;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fas fa-link" style="font-size:1.2rem;"></i></button>
+                <button onclick="navigator.clipboard.writeText('${internalShareUrl}'); window.trackEvent('job_share', {job_title: decodeURIComponent('${encodedTitle}'), platform: 'Clipboard'}); this.innerHTML='<i class=\\\'fas fa-check\\\'></i>'; setTimeout(() => this.innerHTML='<i class=\\\'fas fa-link\\\'></i>', 2000);" title="Copy Link" style="background:#333; color:#fff; width:45px; height:45px; border:none; border-radius:50%; cursor:pointer; transition:0.2s; margin-left:auto;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fas fa-link" style="font-size:1.2rem;"></i></button>
             </div>
         `;
 
