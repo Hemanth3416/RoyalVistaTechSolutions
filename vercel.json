@@ -1,8 +1,10 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/sitemap.xml",
-      "dest": "/public/sitemap.xml"
+      "source": "/sitemap.xml",
+      "destination": "/public/sitemap.xml"
     }
-  ]
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
