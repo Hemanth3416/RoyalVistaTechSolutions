@@ -496,9 +496,9 @@ document.addEventListener('DOMContentLoaded', () => {
             platform: platform
         });
 
-        const slug = toSlug(job.Title);
-        // Task 4: Use short, clean path instead of query strings
-        const shareUrl = window.location.origin + '/jobs/' + slug;
+        const encodedTitleParam = encodeURIComponent(job.Title || '');
+        // Universal sharing link using query strings
+        const shareUrl = window.location.origin + '/jobs.html?job=' + encodedTitleParam;
         
         // WhatsApp / Telegram optimized messages
         const platformMsgs = {
@@ -514,7 +514,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: job.Title,
                 text: `Check out this job opportunity: ${job.Title}`,
                 url: shareUrl
-            }).catch(err => console.log('Error sharing', err));
+            }).catch(err => {
+                console.log('Error sharing', err);
+                navigator.clipboard.writeText(shareText);
+                alert('Job link copied to clipboard!');
+            });
         } else if (platform === 'WhatsApp' || platform === 'Telegram') {
              // Let the native href handle it if platforms were passed via a element, 
              // but here we are in a function, so we might need to trigger window.open

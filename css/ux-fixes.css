@@ -56,8 +56,8 @@
         width: 100% !important;
         gap: 1.5rem !important;
         
-        /* Adjusted height for exactly (~2) full items visible initially */
-        max-height: calc(1.7 * (100vw * 9/16) + 3rem) !important; 
+        /* Show exactly 2.5 cards to hint that scrolling is needed */
+        max-height: calc(2.5 * (100vw * 9/16) + 3rem) !important; 
         overflow-y: auto !important;
         overflow-x: hidden !important;
         padding-right: 2px !important;
