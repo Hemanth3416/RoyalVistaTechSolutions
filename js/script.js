@@ -298,7 +298,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        jobsToRender.forEach(job => {
+        jobsToRender.forEach((job, renderIndex) => {
+            // Get original index in allJobsData
+            const originalIndex = allJobsData.indexOf(job);
+            
             const cats = job.Categories ? String(job.Categories).split(',').map(c => c.trim()) : [];
             const catBadges = cats.map(c => `<span class="job-category-badge" style="background:#222; color:#03dac6; padding:2px 8px; border-radius:12px; font-size:0.75rem; margin-right:5px; display:inline-block; border: 1px solid #03dac6;">${c}</span>`).join('');
 
@@ -319,9 +322,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            const encodedTitle = encodeURIComponent(job.Title || '');
+            const encodedTitleForSharing = encodeURIComponent(job.Title || '');
             const html = `
-                <div class="job-card" onclick="openJobModal('${encodedTitle}')" style="position:relative; display:flex; flex-direction:column; background:var(--card-bg); border-radius:12px; border:1px solid var(--border-color); overflow:hidden; transition: transform 0.3s ease, box-shadow 0.3s; cursor:pointer;">
+                <div class="job-card" onclick="openJobModal(${originalIndex})" style="position:relative; display:flex; flex-direction:column; background:var(--card-bg); border-radius:12px; border:1px solid var(--border-color); overflow:hidden; transition: transform 0.3s ease, box-shadow 0.3s; cursor:pointer;">
                     ${newBadgeHtml}
                     ${imgHtml}
                     <div style="padding: 1.5rem; flex:1; display:flex; flex-direction:column;">
@@ -329,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="margin-bottom:0.5rem; font-size:1.25rem;">${job.Title}</h3>
                         
                         <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:auto; border-top:1px solid #333; padding-top:1rem;">
-                            <button onclick="event.stopPropagation(); shareJob('${encodedTitle}')" aria-label="Share Job" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem; transition:0.2s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-share-alt"></i></button>
+                            <button onclick="event.stopPropagation(); shareJob('${encodedTitleForSharing}')" aria-label="Share Job" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.2rem; transition:0.2s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-share-alt"></i></button>
                         </div>
                     </div>
                 </div>
@@ -453,12 +456,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.openJobModal = function (encodedTitle) {
+    window.openJobModal = function (jobIndex) {
         if (!allJobsData || allJobsData.length === 0) return;
-        const job = allJobsData.find(j => encodeURIComponent(j.Title || '') === encodedTitle);
+        const job = allJobsData[jobIndex];
         if (!job) return;
 
         const cats = job.Categories ? String(job.Categories).split(',').map(c => c.trim()) : [];
+        const encodedTitle = encodeURIComponent(job.Title || '');
 
         window.trackEvent('job_view', {
             job_title: job.Title,
@@ -502,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const suggestedContainer = document.getElementById('jobModalSuggested');
         if (suggestedContainer) {
             suggestedContainer.innerHTML = '';
-            let suggestedJobs = allJobsData.filter(j => j.Title !== job.Title);
+            let suggestedJobs = allJobsData.filter(j => j !== job);
 
             // Sort to prioritize same categories
             suggestedJobs.sort((a, b) => {
@@ -513,21 +517,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 return bMatches - aMatches;
             });
 
-            const topSuggested = suggestedJobs.slice(0, 4);
+            const topSuggested = suggestedJobs.slice(0, 3);
             if (topSuggested.length === 0) {
                 suggestedContainer.innerHTML = '<p style="color:#666; font-size:0.9rem;">No suggested jobs found.</p>';
             } else {
                 topSuggested.forEach(sj => {
+                    const originalSjIndex = allJobsData.indexOf(sj);
                     const sjImg = sj.Image || null;
                     const sjImgHtml = sjImg ? `<img src="${sjImg}" style="width:50px; height:50px; object-fit:cover; border-radius:6px; flex-shrink:0;">` : `<div style="width:50px; height:50px; border-radius:6px; background:#222; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:10px; color:#555;">JOB</div>`;
-                    const sjCat = sj.Categories ? String(sj.Categories).split(',')[0].trim() : '';
+                    const sjCats = sj.Categories ? String(sj.Categories).split(',').map(c => c.trim()).join(', ') : '';
 
                     const el = `
-                        <div onclick="openJobModal('${encodeURIComponent(sj.Title || '')}')" style="display:flex; gap:12px; background:#1a1a1a; padding:12px; border-radius:8px; cursor:pointer; transition:0.2s; border:1px solid transparent;" onmouseover="this.style.borderColor='var(--primary-color)'" onmouseout="this.style.borderColor='transparent'">
+                        <div onclick="event.stopPropagation(); window.trackEvent('job_suggested_click', { job_title: decodeURIComponent('${encodeURIComponent(sj.Title || '')}') }); openJobModal(${originalSjIndex})" style="display:flex; gap:12px; background:#1a1a1a; padding:12px; border-radius:8px; cursor:pointer; transition:0.2s; border:1px solid transparent;" onmouseover="this.style.borderColor='var(--primary-color)'" onmouseout="this.style.borderColor='transparent'">
                             ${sjImgHtml}
                             <div style="flex:1; overflow:hidden; display:flex; flex-direction:column; justify-content:center;">
                                 <h4 style="font-size:0.95rem; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff;">${sj.Title}</h4>
-                                <span style="font-size:0.75rem; color:var(--primary-color); font-weight:bold;">${sjCat}</span>
+                                <span style="font-size:0.75rem; color:var(--primary-color); font-weight:bold;">${sjCats}</span>
                             </div>
                         </div>
                     `;
@@ -539,7 +544,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (jobDetailModal) {
             jobDetailModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            jobDetailModal.scrollTop = 0; // Scroll modal up
+            
+            // Focus on the scrollable content container
+            const modalContent = jobDetailModal.querySelector('.portfolio-modal-content');
+            if (modalContent) modalContent.scrollTop = 0;
         }
     }
 

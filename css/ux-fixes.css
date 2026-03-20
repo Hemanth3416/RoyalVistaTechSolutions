@@ -48,21 +48,33 @@
 }
 
 /* Special Overrides for Mobile Image Fitting and Single-Row Job Posts */
-    @media (max-width: 768px) {
-    /* Mobile Scroll Behavior: 1 Column Exactly, 3 rows visible by default (~80-85vh) */
+@media (max-width: 768px) {
+    /* Mobile Scroll Behavior: 1 Column Exactly, precisely 2 cards visible to start */
     .portfolio-grid, #jobsGrid {
         display: grid !important;
         grid-template-columns: 1fr !important;
         width: 100% !important;
         gap: 1.5rem !important;
         
-        /* Precisely calculate max-height to show 3 rows (items) by default */
-        max-height: calc(3 * (100vw * 9/16) + 4.5rem) !important; 
+        /* Adjusted height for exactly (~2) full items visible initially */
+        max-height: calc(1.7 * (100vw * 9/16) + 3rem) !important; 
         overflow-y: auto !important;
-        padding-right: 5px !important;
-        padding-bottom: 2rem !important;
-        
-        /* Custom scrollbar to match premium look */
+        overflow-x: hidden !important;
+        padding-right: 2px !important;
+        padding-bottom: 3rem !important;
+        align-items: start;
+    }
+
+    /* Ensure items take full width and don't overlap due to height issues */
+    .portfolio-item, .job-card {
+        width: 100% !important;
+        height: auto !important;
+        min-height: calc(100vw * 9/16) !important;
+        display: block !important;
+        margin-bottom: 0.5rem;
+    }
+    /* Custom scrollbar to match premium look */
+    .portfolio-grid, #jobsGrid {
         scrollbar-width: thin;
         scrollbar-color: var(--primary-color) var(--bg-darker);
     }
@@ -78,12 +90,6 @@
     
     .portfolio-grid::-webkit-scrollbar-track, #jobsGrid::-webkit-scrollbar-track {
         background: var(--bg-darker);
-    }
-
-    /* Clear the forced margin zeros so padding works */
-    .portfolio-item, .job-card {
-        width: 100% !important;
-        max-width: 100% !important;
     }
 
     /* Force Portfolio Card Images to contain properly without cropping out logos */
