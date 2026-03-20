@@ -459,8 +459,8 @@ ul {
 
     /* Portfolio - 2 per row maintained */
     .portfolio-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.75rem;
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
     }
 
     .portfolio-overlay h3 {
@@ -1860,8 +1860,8 @@ footer p {
     }
 
     .portfolio-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.75rem;
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem;
     }
 
     .hero p {
@@ -1942,8 +1942,8 @@ footer p {
     }
 
     .portfolio-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.5rem;
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
     }
 
     .portfolio-overlay h3 {

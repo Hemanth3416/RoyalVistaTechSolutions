@@ -48,16 +48,48 @@
 }
 
 /* Special Overrides for Mobile Image Fitting and Single-Row Job Posts */
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
+    /* Mobile Scroll Behavior: 1 Column Exactly, 3 rows visible by default (~80-85vh) */
+    .portfolio-grid, #jobsGrid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        gap: 1.5rem !important;
+        
+        /* Precisely calculate max-height to show 3 rows (items) by default */
+        max-height: calc(3 * (100vw * 9/16) + 4.5rem) !important; 
+        overflow-y: auto !important;
+        padding-right: 5px !important;
+        padding-bottom: 2rem !important;
+        
+        /* Custom scrollbar to match premium look */
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) var(--bg-darker);
+    }
+
+    .portfolio-grid::-webkit-scrollbar, #jobsGrid::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .portfolio-grid::-webkit-scrollbar-thumb, #jobsGrid::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 10px;
+    }
+    
+    .portfolio-grid::-webkit-scrollbar-track, #jobsGrid::-webkit-scrollbar-track {
+        background: var(--bg-darker);
+    }
+
+    /* Clear the forced margin zeros so padding works */
+    .portfolio-item, .job-card {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
     /* Force Portfolio Card Images to contain properly without cropping out logos */
     .portfolio-img img {
         object-fit: contain !important;
         background-color: var(--bg-darker); /* Provide clean background for contained images */
-    }
-
-    /* Force Job Grid into Single Column Rectangle Shape on Mobile */
-    #jobsGrid {
-        grid-template-columns: 1fr !important;
     }
 }
 
@@ -295,6 +327,7 @@
         white-space: normal;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
