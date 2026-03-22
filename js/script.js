@@ -90,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Video Detection Logic
                 let videoEmbed = null;
+                let isDirectVideo = false;
+                const lowLink = link.toLowerCase();
+                
                 if (link.includes('youtube.com/watch?v=')) {
                     const vid = link.split('v=')[1].split('&')[0];
                     videoEmbed = `https://www.youtube.com/embed/${vid}`;
@@ -99,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (link.includes('vimeo.com/')) {
                     const vid = link.split('vimeo.com/')[1].split('?')[0];
                     videoEmbed = `https://player.vimeo.com/video/${vid}`;
+                } else if (lowLink.endsWith('.mp4') || lowLink.endsWith('.mov') || lowLink.endsWith('.webm') || lowLink.includes('.mp4?')) {
+                    isDirectVideo = true;
+                    videoEmbed = link;
                 }
 
                 // If link exists and is NOT a video, redirect the user immediately!
@@ -112,8 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (modalMedia) {
                     modalMedia.innerHTML = '';
 
-                    if (videoEmbed) {
-                        modalMedia.innerHTML = `<iframe src="${videoEmbed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; aspect-ratio:16/9;"></iframe>`;
+                    if (isDirectVideo) {
+                        modalMedia.innerHTML = `<video src="${videoEmbed}" controls style="width:100%; height:auto; max-height:80vh; background:#000; display:block; margin:0 auto;" autoplay muted playsinline></video>`;
+                    } else if (videoEmbed) {
+                        modalMedia.innerHTML = `<div class="video-responsive-container"><iframe src="${videoEmbed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
                     } else if (img) {
                         const newImg = document.createElement('img');
                         newImg.src = img.src;
@@ -340,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const metaTags = {
             'og:title': job.Title,
             'og:description': job.Description ? job.Description.substring(0, 160) : 'New job opportunity via RoyalVista Tech Solutions.',
-            'og:image': job.Image || 'https://royalvistatechsolutions.vercel.app/favicon.png',
+            'og:image': job.Image || 'https://royalvistatechsolutions.vercel.app/Share_preview.png',
             'og:url': legacyUrl
         };
 

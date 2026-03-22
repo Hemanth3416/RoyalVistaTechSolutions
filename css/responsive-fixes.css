@@ -1,0 +1,101 @@
+/* --- Vertical Card Layout for Why Choose Us --- */
+/* We use #why-us ID to ensure this rule wins over any general grids */
+#why-us .why-choose-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.5rem !important;
+    max-width: 900px !important;
+    margin: 0 auto !important;
+}
+
+#why-us .why-choose-card {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem !important;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+}
+
+#why-us .why-choose-card:hover {
+    transform: translateX(15px);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
+}
+
+#why-us .why-icon-box {
+    font-size: 3.5rem;
+    flex-shrink: 0;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#why-us .why-text-box h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+#why-us .why-text-box p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.7;
+}
+
+/* --- Mobile Fix: Force Column Stacking & Center Align --- */
+@media (max-width: 850px) {
+    #why-us .why-choose-card {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 1.5rem !important;
+        padding: 2.5rem 1.5rem !important;
+        transform: none !important; /* Disable slide on mobile */
+    }
+
+    #why-us .why-choose-card:hover {
+        transform: translateY(-8px) !important;
+    }
+
+    #why-us .why-icon-box {
+        width: 90px;
+        height: 90px;
+        font-size: 2.8rem;
+    }
+
+    #why-us .why-text-box h3 {
+        font-size: 1.5rem;
+    }
+
+    #why-us .why-text-box p {
+        font-size: 1rem;
+    }
+}
+
+/* --- Responsive Video Container --- */
+.video-responsive-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Default 16:9 */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+    border-radius: 12px;
+}
+
+.video-responsive-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
