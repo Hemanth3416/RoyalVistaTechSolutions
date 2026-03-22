@@ -1,0 +1,23 @@
+{
+  "name": "RoyalVista Tech Solutions",
+  "short_name": "RoyalVista",
+  "description": "Professional Web Design & Digital Creative agency.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#03dac6",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const defaultImg = `<div class="placeholder-img" style="background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; height:100%; aspect-ratio:16/9; font-weight:bold;">${item.Category || 'PROJECT'}</div>`;
-                    const imgHtml = item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title}" style="width:100%; height:100%; object-fit:cover;">` : defaultImg;
+                    const imgHtml = item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">` : defaultImg;
 
                     const html = `
                         <div class="portfolio-item card" data-category="${categoryClass}" data-link="${item.ProjectLink || '#'}">
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const metaTags = {
             'og:title': job.Title,
             'og:description': job.Description ? job.Description.substring(0, 160) : 'New job opportunity via RoyalVista Tech Solutions.',
-            'og:image': job.Image || 'https://royalvistatechsolutions.vercel.app/assets/images/og-default.jpg',
+            'og:image': job.Image || 'https://royalvistatechsolutions.vercel.app/favicon.png',
             'og:url': legacyUrl
         };
 
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const shareMsg = `Check out this job opportunity: ${job.Title}\n${job.Link || window.location.href}`;
 
             const imageUrl = job.Image || null;
-            const imgHtml = imageUrl ? `<img src="${imageUrl}" alt="${job.Title}" style="width:100%; height:180px; object-fit:cover;">` : `<div style="height:180px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">${cats[0] || 'JOB UPDATE'}</div>`;
+            const imgHtml = imageUrl ? `<img src="${imageUrl}" alt="${job.Title}" style="width:100%; height:180px; object-fit:cover;" loading="lazy">` : `<div style="height:180px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">${cats[0] || 'JOB UPDATE'}</div>`;
 
             // New Job Badge Logic (within 24 hours)
             let newBadgeHtml = '';
@@ -427,7 +427,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        uniqueCats.forEach(cat => {
+        // Sort alphabetically but move 'Fresher' and 'Experienced' to the end
+        const specialCats = ['Fresher', 'Experienced', 'Freshers'];
+        let sortedCats = Array.from(uniqueCats).sort((a, b) => a.localeCompare(b));
+        
+        const mainCats = sortedCats.filter(c => !specialCats.includes(c));
+        const endCats = sortedCats.filter(c => specialCats.includes(c));
+        const finalCatsArr = [...mainCats, ...endCats];
+
+        finalCatsArr.forEach(cat => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
             btn.setAttribute('data-job-filter', cat);
@@ -497,13 +505,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const encodedTitleParam = encodeURIComponent(job.Title || '');
-        // Universal sharing link using query strings
-        const shareUrl = window.location.origin + '/jobs.html?job=' + encodedTitleParam;
+        // Universal clean sharing link
+        const shareUrl = window.location.origin + '/jobs?job=' + encodedTitleParam;
         
-        // WhatsApp / Telegram optimized messages
+        // WhatsApp / Telegram optimized messages (Include description for better context)
+        const shortDesc = job.Description ? job.Description.substring(0, 100) + '...' : '';
         const platformMsgs = {
-            'WhatsApp': `🔥 *Job Opening Alert* 🔥\n\n*${job.Title}*\n\nRead more & Apply here:\n${shareUrl}`,
-            'Telegram': `🚀 *New Career Opportunity*\n\n*${job.Title}*\n\nView details:\n${shareUrl}`,
+            'WhatsApp': `🔥 *New Job Alert* 🔥\n\n📌 *${job.Title}*\n\n📝 ${shortDesc}\n\n👉 *View Details & Apply:* \n${shareUrl}`,
+            'Telegram': `🚀 *Job Opportunity:* ${job.Title}\n\n${shortDesc}\n\n🔗 *Apply Here:* ${shareUrl}`,
             'Network': `Check out this job opportunity: ${job.Title}\n${shareUrl}`
         };
 

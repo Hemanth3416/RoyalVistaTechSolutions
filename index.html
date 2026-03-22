@@ -2,15 +2,31 @@
 <html lang="en">
 
 <head>
-    <meta name="google-site-verification" content="oqrxCElkAdVSokdQg_MbrD460waa1cX3pyo2UoffzTE" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoyalVista Tech Solutions | Affordable Web Design for Small Businesses</title>
+    <meta name="description"
+        content="Premium web design, logo identity, and digital marketing services. Based in Bangalore, serving small businesses and global brands with affordable and high-quality solutions.">
+    <meta name="keywords"
+        content="Professional Web Design, Affordable IT Services, Digital Marketing Globally, Logo Design Bangalore, Website Development for Small Business, RoyalVista Tech Solutions">
+    <meta name="author" content="RoyalVista Tech Solutions">
+    <meta name="google-site-verification" content="oqrxCElkAdVSokdQg_MbrD460waa1cX3pyo2UoffzTE" />
+
+    <!-- Favicon Link -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#03dac6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <!-- Open Graph (Google + WhatsApp Preview Fix) -->
-    <meta property="og:title" content="RoyalVista Tech Solutions" />
-    <meta property="og:description" content="Professional Web Design, Logo Design, Video Editing, and Digital Services." />
+    <meta property="og:title" content="RoyalVista Tech Solutions | Professional Web Design" />
+    <meta property="og:description"
+        content="Elevate your business with premium and affordable web design, logo identity, and digital services tailored for small businesses in Bangalore." />
     <meta property="og:url" content="https://royalvistatechsolutions.vercel.app/" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://royalvistatechsolutions.vercel.app/preview.png" />
+    <meta property="og:image" content="https://royalvistatechsolutions.vercel.app/favicon.png" />
     <meta property="og:site_name" content="RoyalVista Tech Solutions" />
 
     <!-- Google Fonts -->
@@ -35,6 +51,56 @@
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXXXXX');
     </script>
+    <!-- Structured Data (Schema.org) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "RoyalVista Tech Solutions",
+      "url": "https://royalvistatechsolutions.vercel.app/",
+      "logo": "https://royalvistatechsolutions.vercel.app/favicon.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+919945963386",
+        "contactType": "customer service",
+        "email": "royalvistatechsolutions@gmail.com",
+        "availableLanguage": ["English", "Telugu"]
+      },
+      "sameAs": [
+        "https://www.instagram.com/royalvistatechsolutions/"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "RoyalVista Tech Solutions",
+      "image": "https://royalvistatechsolutions.vercel.app/favicon.png",
+      "@id": "https://royalvistatechsolutions.vercel.app/",
+      "url": "https://royalvistatechsolutions.vercel.app/",
+      "telephone": "+919945963386",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bangalore",
+        "addressRegion": "Karnataka",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 12.9716,
+        "longitude": 77.5946
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      }
+    }
+    </script>
 </head>
 
 <body data-authenticated="false">
@@ -47,12 +113,12 @@
                     <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </div>
                 <ul class="nav-menu">
-                    <li><a href="#home" class="nav-link">Home</a></li>
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#services" class="nav-link">Services</a></li>
-                    <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                    <li><a href="jobs.html" class="nav-link" target="_blank">Job Updates</a></li>
+                    <li><a href="/#home" class="nav-link">Home</a></li>
+                    <li><a href="/#about" class="nav-link">About</a></li>
+                    <li><a href="/#services" class="nav-link">Services</a></li>
+                    <li><a href="/#portfolio" class="nav-link">Portfolio</a></li>
+                    <li><a href="/#contact" class="nav-link">Contact</a></li>
+                    <li><a href="/jobs" class="nav-link active" target="_blank">Job Updates</a></li>
 
                 </ul>
             </div>
@@ -64,8 +130,8 @@
         <section id="home" class="hero main-section">
             <div class="hero-bg-overlay"></div>
             <div class="container hero-content">
-                <h1 class="animate-up">RoyalVista Tech Solutions<br>Empowering Brands
-                    with <span class="highlight">Innovation</span></h1>
+                <h1 class="animate-up">Affordable IT Services & <br><span class="highlight">Web Design</span> for Your
+                    Business</h1>
                 <p class="animate-up delay-1">Premium Web Design, Logo Identity, and Video Solutions.</p>
                 <div class="hero-btns animate-up delay-2">
                     <a href="#contact" class="btn btn-primary">Get Started</a>
@@ -109,19 +175,19 @@
                 </div>
                 <div class="services-grid">
 
-                    <article class="service-card">
+                    <article class="service-card" id="service-web">
                         <div class="icon-box"><i class="fas fa-desktop"></i></div>
                         <h3>Web Design & Development</h3>
                         <p>Professional website design and development.</p>
-                        <a href="#contact" class="service-link btn-small">Inquire More <i
+                        <a href="#service-details-web" class="service-link btn-small">Learn More <i
                                 class="fas fa-arrow-right"></i></a>
                     </article>
 
-                    <article class="service-card">
+                    <article class="service-card" id="service-logo">
                         <div class="icon-box"><i class="fas fa-pen-nib"></i></div>
                         <h3>Logo Design</h3>
                         <p>Unique and memorable logo creation.</p>
-                        <a href="#contact" class="service-link btn-small">Inquire More <i
+                        <a href="#service-details-design" class="service-link btn-small">Learn More <i
                                 class="fas fa-arrow-right"></i></a>
                     </article>
 
@@ -129,7 +195,7 @@
                         <div class="icon-box"><i class="fas fa-image"></i></div>
                         <h3>Thumbnail design</h3>
                         <p>Eye-catching thumbnails for videos and content.</p>
-                        <a href="#contact" class="service-link btn-small">Inquire More <i
+                        <a href="#service-details-design" class="service-link btn-small">Learn More <i
                                 class="fas fa-arrow-right"></i></a>
                     </article>
 
@@ -137,7 +203,7 @@
                         <div class="icon-box"><i class="fas fa-bullhorn"></i></div>
                         <h3>Engaging posts</h3>
                         <p>Creative poster and advertisement designs to boost engagement.</p>
-                        <a href="#contact" class="service-link btn-small">Inquire More <i
+                        <a href="#service-details-marketing" class="service-link btn-small">Learn More <i
                                 class="fas fa-arrow-right"></i></a>
                     </article>
 
@@ -145,7 +211,7 @@
                         <div class="icon-box"><i class="fas fa-address-card"></i></div>
                         <h3>Invitation cards & Videos</h3>
                         <p>Elegant invitation cards and high-quality video editing for special events.</p>
-                        <a href="#contact" class="service-link btn-small">Inquire More <i
+                        <a href="#service-details-design" class="service-link btn-small">Learn More <i
                                 class="fas fa-arrow-right"></i></a>
                     </article>
 
@@ -157,6 +223,163 @@
                                 class="fas fa-arrow-right"></i></a>
                     </article>
 
+                </div>
+
+                <!-- Detailed Service Deep Dive (SEO Expansion) -->
+                <div class="service-details-expansion"
+                    style="margin-top: 5rem; color: var(--text-muted); line-height: 1.8;">
+
+                    <!-- Web Development Section -->
+                    <div id="service-details-web" class="detail-block card"
+                        style="padding: 3rem; margin-bottom: 3rem; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                        <h2 class="section-title" style="font-size: 2rem; margin-bottom: 2rem; text-align: left;">Expert
+                            <span class="highlight">Web Development</span> Services</h2>
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                            <div>
+                                <p>At RoyalVista Tech Solutions, we believe that a website is more than just a digital
+                                    placeholder—it’s the engine that drives your business. Our website development
+                                    services are specifically tailored for small businesses and global entrepreneurs who
+                                    need high-performing, scalable, and affordable digital solutions. Whether you’re
+                                    looking to build an enterprise-level web application or a simple, elegant business
+                                    portfolio, our team in Bangalore combines technical expertise with a creative touch
+                                    to deliver results.</p>
+                                <p style="margin-top: 1.5rem;">We specialize in modern technologies that ensure your
+                                    site is fast, secure, and mobile-responsive. From custom WordPress developed sites
+                                    to complex React or Vue based applications, we handle it all. Our development
+                                    process is transparent and focused on your goals. We start with a deep dive into
+                                    your business requirements, followed by meticulous planning and architecture design.
+                                    This ensures that every line of code we write is optimized for search engines and
+                                    user experience.</p>
+                            </div>
+                            <div>
+                                <p>Growing your brand online requires a robust backend and an intuitive frontend. Our
+                                    web development services provide both. We focus on 'Clean Code' principles to ensure
+                                    your site is easy to maintain and scale as your business grows. For local
+                                    businesses, we offer personalized consulting to help you transition from traditional
+                                    models to a fully digital presence. Global clients benefit from our 24/7 support and
+                                    our ability to transcend time zones to deliver projects on schedule.</p>
+                                <p style="margin-top: 1.5rem;">Choosing RoyalVista means choosing a partner who values
+                                    your ROI. We don’t just build websites; we build growth engines. Our websites are
+                                    designed to convert visitors into loyal customers through strategic Call-to-Actions
+                                    (CTAs) and seamless navigation. If you're looking for affordable web development
+                                    that doesn't compromise on quality, look no further. We are your partner for
+                                    high-performance website design in Bangalore and beyond.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Marketing Section -->
+                    <div id="service-details-marketing" class="detail-block card"
+                        style="padding: 3rem; margin-bottom: 3rem; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                        <h2 class="section-title" style="font-size: 2rem; margin-bottom: 2rem; text-align: left;">
+                            Results-Driven <span class="highlight">Digital Marketing</span></h2>
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                            <div>
+                                <p>In today’s hyper-competitive digital landscape, simply having a website isn’t enough.
+                                    You need a comprehensive digital marketing strategy that puts your brand in front of
+                                    the right audience at the right time. RoyalVista Tech Solutions offers
+                                    results-driven digital marketing services designed to boost your online visibility
+                                    and drive measurable growth. From Social Media Management (SMM) to Search Engine
+                                    Optimization (SEO), we provide a full spectrum of marketing solutions tailored for
+                                    startups and small-to-medium enterprises (SMEs).</p>
+                                <p style="margin-top: 1.5rem;">Our SEO services are built on the latest industry
+                                    standards. we focus on both 'on-page' and 'off-page' optimization to ensure your
+                                    business ranks high on Google for relevant keywords like 'Web Design Bangalore' or
+                                    'Affordable IT Services'. We conduct thorough keyword research and competitor
+                                    analysis to create a roadmap for your digital success. By optimizing your content,
+                                    meta tags, and site structure, we help you attract organic traffic that actually
+                                    converts.</p>
+                            </div>
+                            <div>
+                                <p>Social Media is another pillar of our digital marketing expertise. We create engaging
+                                    posts, videos, and campaign strategies for platforms like Instagram, Facebook, and
+                                    WhatsApp. Our goal is to build a community around your brand, fostering trust and
+                                    loyalty among your customers. For local businesses, targeted social media campaigns
+                                    can be a game-changer, allowing you to reach potential clients in your specific
+                                    neighborhood or city while still maintaining a global appeal.</p>
+                                <p style="margin-top: 1.5rem;">Lead generation is at the heart of everything we do. We
+                                    combine data analytics with creative storytelling to craft messages that resonate
+                                    with your target market. Whether it’s through email marketing, pay-per-click (PPC)
+                                    advertising, or content marketing, we ensure every marketing dollar you spend
+                                    contributes to your bottom line. At RoyalVista, we don't just chase 'likes'; we
+                                    chase 'results'. Partner with us to scale your digital marketing to new heights and
+                                    dominate your niche globally.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Design Section -->
+                    <div id="service-details-design" class="detail-block card"
+                        style="padding: 3rem; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                        <h2 class="section-title" style="font-size: 2rem; margin-bottom: 2rem; text-align: left;">
+                            Premium <span class="highlight">Creative & Brand</span> Identity</h2>
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                            <div>
+                                <p>Your brand’s visual identity is the first thing your customers see, and first
+                                    impressions matter. At RoyalVista Tech Solutions, we specialize in premium UI/UX
+                                    design and creative brand identity that sets you apart from the competition. Our
+                                    design philosophy is centered around the user—we believe that great design should
+                                    not only look beautiful but also be highly functional and easy to navigate.</p>
+                                <p style="margin-top: 1.5rem;">Our UI/UX design services are perfect for businesses
+                                    looking to enhance their digital experience. We create intuitive layouts, smooth
+                                    transitions, and engaging interfaces that keep users coming back. Whether it’s a
+                                    mobile app or a web platform, our designs are crafted to reflect your brand's
+                                    personality and values. We prioritize accessibility and performance, ensuring that
+                                    your site looks great on every device, from smartphones to desktops.</p>
+                            </div>
+                            <div>
+                                <p>Beyond web design, we are experts in Logo Design and Branding. A logo is the symbol
+                                    of your brand's promise, and we take that very seriously. Our designers work closely
+                                    with you to create colors, typography, and imagery that speak to your target
+                                    audience. We provide unique and memorable logo concepts that help your business
+                                    stand out in a crowded market. Whether you’re a new startup looking for your first
+                                    identity or an established business needing a refresh, we have the creative talent
+                                    to help you shine.</p>
+                                <p style="margin-top: 1.5rem;">We also offer specialized creative services like
+                                    Thumbnail Design for videos, engaging social media posts, and invitation cards. Our
+                                    multimedia team ensures that every piece of content you put out is of the highest
+                                    quality. By integrating your brand's visual identity across all digital touchpoints,
+                                    we help you build a consistent and professional image. At RoyalVista, our mission is
+                                    to turn your vision into a visual reality that captures hearts and minds globally.
+                                    affordable design that feels premium.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section id="why-us" class="section main-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Why Choose <span class="highlight">RoyalVista</span>?</h2>
+                    <p class="section-subtitle">Delivering high-performance digital solutions that drive business growth
+                        globally.</p>
+                </div>
+                <div class="services-grid">
+                    <div class="card testimonial-card" style="padding: 2.5rem; text-align: center;">
+                        <i class="fas fa-rocket highlight" style="font-size: 3rem; margin-bottom: 1.5rem;"></i>
+                        <h3>Global Quality</h3>
+                        <p>We deliver international-standard designs with a focus on high performance and modern
+                            aesthetics for clients worldwide.</p>
+                    </div>
+                    <div class="card testimonial-card" style="padding: 2.5rem; text-align: center;">
+                        <i class="fas fa-wallet highlight" style="font-size: 3rem; margin-bottom: 1.5rem;"></i>
+                        <h3>Affordable Pricing</h3>
+                        <p>Premium web services shouldn't break the bank. We offer tailored packages specifically for
+                            startups and small-to-medium businesses.</p>
+                    </div>
+                    <div class="card testimonial-card" style="padding: 2.5rem; text-align: center;">
+                        <i class="fas fa-headset highlight" style="font-size: 3rem; margin-bottom: 1.5rem;"></i>
+                        <h3>24/7 Dedicated Support</h3>
+                        <p>We provide continuous updates and dedicated support for all our active clients to ensure
+                            their long-term digital success.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -187,6 +410,8 @@
             </div>
         </section>
 
+        <!-- Testimonials Section Removed as Requested -->
+
 
 
         <!-- Contact Section -->
@@ -198,8 +423,7 @@
                         <p>Start your project today with RoyalVista Tech Solutions.</p>
                         <div class="contact-details">
                             <div class="contact-item"><i class="fas fa-envelope"></i><a
-                                    href="mailto:royalvistatechsolutions@gmail.com"
-                                    target="_blank"
+                                    href="mailto:royalvistatechsolutions@gmail.com" target="_blank"
                                     style="color: inherit; text-decoration: none;">royalvistatechsolutions@gmail.com</a>
                             </div>
                             <div class="contact-item"><i class="fas fa-clock"></i><span>24/7 Support for Active
@@ -256,6 +480,17 @@
     <footer class="bg-black">
         <div class="container" style="padding: 4rem 0; text-align: center;">
             <div class="footer-logo">RoyalVista<span class="highlight"> Tech Solutions</span></div>
+            <p
+                style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Premium Web Design & Digital Creative Agency. Based in Bangalore | Serving Small Businesses and Global
+                Brands with Excellence.
+            </p>
+            <div class="footer-contact-info"
+                style="margin-bottom: 2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; color: #fff;">
+                <span><i class="fas fa-envelope highlight"></i> <a href="mailto:royalvistatechsolutions@gmail.com"
+                        style="color: inherit; text-decoration: none;">royalvistatechsolutions@gmail.com</a></span>
+                <span><i class="fas fa-globe highlight"></i> Worldwide Support</span>
+            </div>
             <p>&copy; 2026 RoyalVista Tech Solutions. All rights reserved.</p>
             <div class="social-links" style="justify-content: center; margin-top: 1rem;">
                 <a href="https://wa.me/+919945963386" target="_blank" aria-label="WhatsApp"><i
